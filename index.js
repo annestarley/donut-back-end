@@ -1,56 +1,20 @@
-let db = {
-  donuts: []
-}
-let uuid = require('uuid/v4')
-
-function createDonut (type, price, brand, rating) {
-  let donut = {
-    id: uuid(),
-    type,
-    price,
-    brand,
-    rating
-  }
-  if (price < 0) {
-    throw new Error('Error: price must be positive!')
-  }
-  db.donuts.push(donut)
-  return donut
-}
-
-function getAllDonuts () {
-  return db.donuts
-}
-
-function getDonutById () {
-  return db.donuts.find(donut => donut.id == id)
-}
 
 //routes
 let express = require('express')
 let app = express()
-let bodyParser = requrie('body-parser')
+let bodyParser = require('body-parser')
+let cors = require('cors')
+// let Donut = require('./model.js')
+let DonutController = require('./controller.js')
+
+app.use(cors())
+app.use(bodyParser.json())
 
 //Get routes
-app.get('/donuts', (req, res) => {
-  let donuts = getAllDonuts()
-  res.json({data: donuts})
-})
+app.get('/donuts', DonutController.getDonutsController)
+app.get('/donuts/:id', DonutController.getDonutIdController)
+app.post('/donuts', DonutController.createDonutController)
 
-app.get('/donuts/id', (req, res) => {
-  let id = req.params.id
-  let donuts = getDonutById(id)
-  res.json({data: donut})
-})
-
-app.post('/donuts', (req, res) => {
-  let {type, price, brand, rating} = req.body
-  let donut = createDonut(type, price, brand, rating)
-  res.json({data: donut})
-})
-
-// createDonut('sprinkles', 5000, 'cat', 5)
-// let allDonuts = getAllDonuts()
-// console.log('all donuts', allDonuts);
-// let donut = getDonutById(allDonuts[0].id)
-// console.log(donut)
+//PORT
+const PORT = process.env.PORT || 3000
+app.listen(PORT, () => console.log(`Listening on port: ${PORT}`))

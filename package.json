@@ -10,6 +10,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "cors": "^2.8.4",
+    "knex": "^0.14.2",
     "uuid": "^3.2.1"
   }
 }
